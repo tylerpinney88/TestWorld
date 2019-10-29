@@ -6,10 +6,13 @@ public class PortalController : MonoBehaviour
 {
     public GameObject AltPortal;
     public GameObject Player;
+    public GameObject GameManagerObj;
+    public GameManager GM;
 
     public void Awake()
     {
-     
+        GM = GameManagerObj.GetComponent<GameManager>();
+          
     }
     public void Start()
     {
@@ -19,6 +22,11 @@ public class PortalController : MonoBehaviour
     public void Update() 
     {
         AltPortalAssignment();
+
+        if (Input.GetKeyDown(KeyCode.T)) 
+        {
+            TeleportPlayer();
+        }
     }
 
     public void AltPortalAssignment() 
@@ -38,11 +46,17 @@ public class PortalController : MonoBehaviour
 
     public void OnTriggerEnter(Collider col) 
     {
-        if (col.gameObject.tag == "Player") 
+        if (col.gameObject.tag == "Player" && GM.Teleported == false) 
         {
             Debug.Log("Player seen");
-            Player.transform.position = AltPortal.transform.position;
+            GM.Teleported = true;
+            TeleportPlayer();
         }
+    }
+
+    void TeleportPlayer() 
+    {
+        Player.transform.position = AltPortal.transform.position;
     }
 
 }

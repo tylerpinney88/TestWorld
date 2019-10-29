@@ -4,31 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private string horizontalInputName;
-    [SerializeField] private string verticalInputName;
-    [SerializeField] private float movementSpeed;
+    #region "Variables"
+    public Rigidbody Rigid;
+    public float MoveSpeed;
+    public float JumpForce;
+    #endregion
 
-    private CharacterController charController;
-
-    private void Awake()
+    public void Update()
     {
-        charController = GetComponent<CharacterController>();
+        Rigid.MovePosition(transform.position + (transform.forward * Input.GetAxis("Vertical") * MoveSpeed) + (transform.right * Input.GetAxis("Horizontal") * MoveSpeed));
+        if (Input.GetKeyDown("space"))
+            Rigid.AddForce(transform.up * JumpForce);
     }
-
-    private void Update()
-    {
-        PlayerMove();
-    }
-
-    private void PlayerMove()
-    {
-        float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
-        float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
-
-        Vector3 forwardMovement = transform.forward * vertInput;
-        Vector3 rightMovement = transform.right * horizInput;
-
-        charController.SimpleMove(forwardMovement + rightMovement);
-    }
-
 }
